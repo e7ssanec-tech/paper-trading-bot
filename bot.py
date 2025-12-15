@@ -13,7 +13,6 @@ def root():
 async def webhook(request: Request):
     data = await request.json()
 
-    # проверка секрета
     if WEBHOOK_SECRET and data.get("secret") != WEBHOOK_SECRET:
         raise HTTPException(status_code=401, detail="Bad secret")
 
