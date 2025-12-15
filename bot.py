@@ -17,9 +17,7 @@ async def webhook(request: Request):
     if WEBHOOK_SECRET and data.get("secret") != WEBHOOK_SECRET:
         raise HTTPException(status_code=401, detail="Bad secret")
 
-    # чтобы видеть в Render Logs что реально пришло
     print("WEBHOOK RECEIVED:", data)
 
-    # пример: ожидаем data["signal"] = "long" | "short"
     signal = data.get("signal")
     return {"ok": True, "signal": signal}
