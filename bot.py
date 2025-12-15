@@ -1,15 +1,20 @@
-from fastapi import FastAPI
-import requests
+from fastapi import FastAPI, Request, HTTPException
+import os
+import time
 
 app = FastAPI()
 
-@app.get("/")
-def root():
-    return {"status": "paper trading bot is alive"}
+WEBHOOK_SECRET = os.getenv("WEBHOOK_SECRET")
 
-@app.get("/price")
-def get_price(symbol: str = "BTCUSDT"):
-    url = f"https://api.binance.com/api/v3/ticker/price?symbol={symbol}"
-    r = requests.get(url, timeout=5)
-    r.raise_for_status()
-    return r.json()
+START_BALANCE = 800.0
+BASE_SIZE = 500.0
+STEP_SIZE = 20.0
+
+state = {
+    "balance": START_BALANCE,
+    "equity": START_BALANCE,
+    "position": None,
+    "entry_price": None,
+    "position_size": 0.0,
+    "flip_count": 0,
+}
